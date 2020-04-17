@@ -78,6 +78,29 @@ export default defineConfig({
               component: './ListTableList',
             },
             {
+              path: '/system',
+              name: 'system',
+              icon: 'crown',
+              component: './Admin',
+              authority: ['super_admin'],
+              routes: [
+                {
+                  path: '/system/user',
+                  name: 'user',
+                  icon: 'smile',
+                  component: './Welcome',
+                  authority: ['super_admin'],
+                },
+                {
+                  path: '/system/role',
+                  name: 'role',
+                  icon: 'smile',
+                  component: './Welcome',
+                  authority: ['super_admin'],
+                },
+              ],
+            },
+            {
               component: './404',
             },
           ],
