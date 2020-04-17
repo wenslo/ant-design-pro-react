@@ -4,6 +4,8 @@
  */
 import { extend } from 'umi-request';
 import {notification} from 'antd';
+import {history} from "@@/core/history";
+import {stringify} from "querystring";
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -27,7 +29,6 @@ const codeMessage = {
  */
 const errorHandler = (error: { response: Response }): Response => {
   const { response } = error;
-  console.log(response);
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const { status, url } = response;
@@ -55,19 +56,31 @@ const request = extend({
 
 // 响应拦截
 request.interceptors.response.use(async response => {
-  // const text = await response.clone().text();
-  // if (text.indexOf('msg') > -1) {
-  //   const data = await response.clone().json();
-  //   // 处理全局状态码
-  //   if (data.code as number === 0) {
-  //     return data.data;
-  //   }
-  //   if (data.code as number === 0) {
-  //     return data.data;
-  //   }
-  // } else {
-  //   return response.clone().blob();
-  // }
+  const text = await response.clone().text();
+  if (text.indexOf('msg') > -1) {
+    const data = await response.clone().json();
+    const code = data.code as number;
+    if(code === 0) {
+      if(data.data){
+        return data.data;
+      }
+    }else if (code === 401){
+      if (window.location.pathname !== '/user/login') {
+        history.replace({
+          pathname: '/user/login',
+          search: stringify({
+            redirect: window.location.href,
+          }),
+        });
+      }
+    }else{
+      notification.error({
+        description: data.msg,
+        message: '网络异常',
+      });
+      return null;
+    }
+  }
   return response;
 });
 

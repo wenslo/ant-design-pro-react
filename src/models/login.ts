@@ -36,12 +36,12 @@ const Model: LoginModelType = {
   effects: {
     *login({ payload }, { call, put }) {
       const response = yield call(login, payload);
-      yield put({
-        type: 'changeLoginStatus',
-        payload: response,
-      });
-      // Login successfully
-      if (response.code as number === 0) {
+      if(response){
+        yield put({
+          type: 'changeLoginStatus',
+          payload: response,
+        });
+        // Login successfully
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
         let { redirect } = params as { redirect: string };
@@ -78,7 +78,7 @@ const Model: LoginModelType = {
   reducers: {
     changeLoginStatus(state, { payload }) {
       const currentAuthority:string[] = [];
-      payload.data.user.authorities.forEach((it:userAuthority) =>{
+      payload.user.authorities.forEach((it:userAuthority) =>{
         currentAuthority.push(it.authority);
       });
       setAuthority(currentAuthority);
