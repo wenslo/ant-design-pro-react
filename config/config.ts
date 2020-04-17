@@ -80,21 +80,20 @@ export default defineConfig({
             {
               path: '/system',
               name: 'system',
-              icon: 'crown',
-              component: './Admin',
+              icon: 'SettingOutlined',
               authority: ['super_admin'],
               routes: [
                 {
                   path: '/system/user',
                   name: 'user',
-                  icon: 'smile',
-                  component: './Welcome',
+                  icon: 'UserOutlined',
+                  component: './system/user',
                   authority: ['super_admin'],
                 },
                 {
                   path: '/system/role',
                   name: 'role',
-                  icon: 'smile',
+                  icon: 'DeploymentUnitOutlined',
                   component: './Welcome',
                   authority: ['super_admin'],
                 },
