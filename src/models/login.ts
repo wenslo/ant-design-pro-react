@@ -10,6 +10,9 @@ export interface StateType {
   type?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
 }
+interface userAuthority{
+  authority:string;
+}
 
 export interface LoginModelType {
   namespace: string;
@@ -74,11 +77,15 @@ const Model: LoginModelType = {
 
   reducers: {
     changeLoginStatus(state, { payload }) {
-      setAuthority(payload.currentAuthority);
+      const currentAuthority:string[] = [];
+      payload.data.user.authorities.forEach((it:userAuthority) =>{
+        currentAuthority.push(it.authority);
+      });
+      setAuthority(currentAuthority);
       return {
         ...state,
-        status: payload.status,
-        type: payload.type,
+        // status: payload.status,
+        // type: payload.type,
       };
     },
   },

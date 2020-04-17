@@ -3,7 +3,7 @@
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
 import { extend } from 'umi-request';
-import { notification } from 'antd';
+import {notification} from 'antd';
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -22,7 +22,6 @@ const codeMessage = {
   503: '服务不可用，服务器暂时过载或维护。',
   504: '网关超时。',
 };
-
 /**
  * 异常处理程序
  */
@@ -53,5 +52,26 @@ const request = extend({
   errorHandler, // 默认错误处理
   credentials: 'include', // 默认请求是否带上cookie
 });
+
+// 响应拦截
+request.interceptors.response.use(async response => {
+  // const text = await response.clone().text();
+  // if (text.indexOf('msg') > -1) {
+  //   const data = await response.clone().json();
+  //   // 处理全局状态码
+  //   if (data.code as number === 0) {
+  //     return data.data;
+  //   }
+  //   if (data.code as number === 0) {
+  //     return data.data;
+  //   }
+  // } else {
+  //   return response.clone().blob();
+  // }
+  return response;
+});
+
+
+
 
 export default request;

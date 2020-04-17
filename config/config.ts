@@ -43,7 +43,7 @@ export default defineConfig({
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          // authority: ['admin', 'user'],
+          authority: ['super_admin'],
           routes: [
             {
               path: '/',
@@ -60,14 +60,14 @@ export default defineConfig({
               name: 'admin',
               icon: 'crown',
               component: './Admin',
-              // authority: ['admin'],
+              authority: ['super_admin'],
               routes: [
                 {
                   path: '/admin/sub-page',
                   name: 'sub-page',
                   icon: 'smile',
                   component: './Welcome',
-                  authority: ['admin'],
+                  authority: ['super_admin'],
                 },
               ],
             },
