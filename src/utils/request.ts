@@ -114,15 +114,22 @@ request.interceptors.response.use(async response => {
 
 export default request;
 
-export async function pageRequest(url: string, data?: any, method?: string) {
+function pageConditionHandler(data: any) {
   if (data && data.params.current) {
     const pageable = {
       page: data.params.current > 0 ? data.params.current - 1 : data.params.current,
       size: data.params.pageSize,
     };
     data.pageable = pageable;
+    delete data.params.current;
+    delete data.params.pageSize;
+    Object.assign(data, data.params);
     delete data.params;
   }
+}
+
+export async function pageRequest(url: string, data?: any, method?: string) {
+  pageConditionHandler(data);
   return request(`/api/${url}`, {
     method: method || 'POST',
     data,
