@@ -2,7 +2,7 @@
  * request 网络请求工具
  * 更详细的 api 文档: https://github.com/umijs/umi-request
  */
-import { extend } from 'umi-request';
+import {extend} from 'umi-request';
 import {notification} from 'antd';
 import {history} from "@@/core/history";
 import {stringify} from "querystring";
@@ -28,10 +28,10 @@ const codeMessage = {
  * 异常处理程序
  */
 const errorHandler = (error: { response: Response }): Response => {
-  const { response } = error;
+  const {response} = error;
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
-    const { status, url } = response;
+    const {status, url} = response;
 
     notification.error({
       message: `请求错误 ${status}: ${url}`,
@@ -61,28 +61,37 @@ request.interceptors.request.use((url, options) => {
   //     page: options.data.current,
   //     size: options.data.pageSize,
   //   };
-    // eslint-disable-next-line no-param-reassign
-    // options.data.pageable = pageable;
-    // delete options.params.pageSize;
-    // delete options.params.current;
+  // eslint-disable-next-line no-param-reassign
+  // options.data.pageable = pageable;
+  // delete options.params.pageSize;
+  // delete options.params.current;
   // }
   // console.log(options);
   return {
     url: `${url}`,
-    options: { ...options, interceptors: true },
+    options: {...options, interceptors: true},
   };
 });
 // 响应拦截
 request.interceptors.response.use(async response => {
   const text = await response.clone().text();
+  if (text.indexOf("pageable") > -1) {
+    const data = await response.clone().json();
+    return {
+      data: data.content,
+      page: data.number+1,
+      success: true,
+      total: data.totalElements,
+    };
+  }
   if (text.indexOf('msg') > -1) {
     const data = await response.clone().json();
     const code = data.code as number;
-    if(code === 0) {
-      if(data.data){
+    if (code === 0) {
+      if (data.data) {
         return data.data;
       }
-    }else if (code === 401){
+    } else if (code === 401) {
       if (window.location.pathname !== '/user/login') {
         history.replace({
           pathname: '/user/login',
@@ -91,7 +100,7 @@ request.interceptors.response.use(async response => {
           }),
         });
       }
-    }else{
+    } else {
       notification.error({
         description: data.msg,
         message: '网络异常',
@@ -103,20 +112,17 @@ request.interceptors.response.use(async response => {
 });
 
 
-
-
 export default request;
 
 export async function pageRequest(url: string, data?: any, method?: string) {
-  if(data && data.params.current){
-      const pageable = {
-        page: data.params.current,
-        size: data.params.pageSize,
-      };
-      data.pageable = pageable;
-      delete data.params;
+  if (data && data.params.current) {
+    const pageable = {
+      page: data.params.current > 0 ? data.params.current - 1 : data.params.current,
+      size: data.params.pageSize,
+    };
+    data.pageable = pageable;
+    delete data.params;
   }
-
   return request(`/api/${url}`, {
     method: method || 'POST',
     data,
