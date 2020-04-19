@@ -54,6 +54,24 @@ const request = extend({
   credentials: 'include', // 默认请求是否带上cookie
 });
 
+// 请求拦截
+request.interceptors.request.use((url, options) => {
+  // if(options.params.current){
+  //   const pageable = {
+  //     page: options.data.current,
+  //     size: options.data.pageSize,
+  //   };
+    // eslint-disable-next-line no-param-reassign
+    // options.data.pageable = pageable;
+    // delete options.params.pageSize;
+    // delete options.params.current;
+  // }
+  // console.log(options);
+  return {
+    url: `${url}`,
+    options: { ...options, interceptors: true },
+  };
+});
 // 响应拦截
 request.interceptors.response.use(async response => {
   const text = await response.clone().text();
@@ -88,3 +106,19 @@ request.interceptors.response.use(async response => {
 
 
 export default request;
+
+export async function pageRequest(url: string, data?: any, method?: string) {
+  if(data && data.params.current){
+      const pageable = {
+        page: data.params.current,
+        size: data.params.pageSize,
+      };
+      data.pageable = pageable;
+      delete data.params;
+  }
+
+  return request(`/api/${url}`, {
+    method: method || 'POST',
+    data,
+  });
+}
