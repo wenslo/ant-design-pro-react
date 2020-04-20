@@ -9,5 +9,5 @@ export async function changeStatus(params?: any) {
   return asyncRequest('/user/status', {params});
 }
 export async function userDetail(id : number) {
-  return asyncRequest(`/detail/${id}`);
+  return asyncRequest(`/user/detail/${id}`);
 }

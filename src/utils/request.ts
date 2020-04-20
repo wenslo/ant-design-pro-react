@@ -137,8 +137,10 @@ export async function pageRequest(url: string, data?: any, method?: string) {
 }
 
 export async function asyncRequest(url: string, data?: any, method?: string) {
-  Object.assign(data, data.params);
-  delete data.params;
+  if(data && data.params){
+    Object.assign(data, data.params);
+    delete data.params;
+  }
   return request(`/api/${url}`, {
     method: method || 'POST',
     data,

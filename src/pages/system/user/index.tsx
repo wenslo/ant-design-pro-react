@@ -4,7 +4,7 @@ import {PageHeaderWrapper} from "@ant-design/pro-layout";
 import ProTable from "@ant-design/pro-table";
 import {changeStatus, queryUserByPage, userDetail} from "@/pages/system/user/service";
 import {Divider, Switch} from "antd";
-import UpdateForm from "@/pages/ListTableList/components/UpdateForm";
+import UpdateForm from "@/pages/system/user/components/UpdateForm";
 
 const switchChange = async (value: boolean,id:number) => {
   await changeStatus({id, enabled: value});
@@ -12,6 +12,7 @@ const switchChange = async (value: boolean,id:number) => {
 const TableList: React.FC<{}> = () => {
   const actionRef = useRef<ActionType>();
   const [entity,handleEntity] = useState();
+  const [updateModalVisible,handleUpdateModalVisible] = useState();
   const columns: ProColumns<any>[] = [
     {
       title: '登录名',
@@ -40,6 +41,7 @@ const TableList: React.FC<{}> = () => {
             onClick={ async () => {
               const detail = await userDetail(record.id);
               handleEntity(detail);
+              handleUpdateModalVisible(true);
               console.log("User update")
             }}
           >
@@ -66,21 +68,21 @@ const TableList: React.FC<{}> = () => {
       {entity ? (
         <UpdateForm
           onSubmit={async (value) => {
-            const success = await handleUpdate(value);
-            if (success) {
-              handleUpdateModalVisible(false);
-              setStepFormValues({});
-              if (actionRef.current) {
-                actionRef.current.reload();
-              }
-            }
+            console.log('handle update');
+            // const success = await handleUpdate(value);
+            // if (success) {
+            //   handleUpdateModalVisible(false);
+            //   setStepFormValues({});
+            //   if (actionRef.current) {
+            //     actionRef.current.reload();
+            //   }
+            // }
           }}
           onCancel={() => {
             handleUpdateModalVisible(false);
-            setStepFormValues({});
           }}
+          entity={entity}
           updateModalVisible={updateModalVisible}
-          values={stepFormValues}
         />
       ) : null}
     </PageHeaderWrapper>
