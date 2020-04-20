@@ -1,8 +1,13 @@
-import request, {pageRequest} from '@/utils/request';
+import {asyncRequest, pageRequest} from '@/utils/request';
 
 export async function queryUserByPage(params?: any) {
-  console.log(params);
   return pageRequest('/user/queryByPage', {
     params,
   });
+}
+export async function changeStatus(params?: any) {
+  return asyncRequest('/user/status', {params});
+}
+export async function userDetail(id : number) {
+  return asyncRequest(`/detail/${id}`);
 }
