@@ -11,3 +11,10 @@ export async function changeStatus(params?: any) {
 export async function userDetail(id : number) {
   return asyncRequest(`/user/detail/${id}`);
 }
+export async function userUpdate(params?: any) {
+  return asyncRequest('/user/save', params);
+}
+
+export async function getAllRole() {
+  return asyncRequest('/user/getAllRole');
+}
