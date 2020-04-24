@@ -1,11 +1,11 @@
 import React from 'react';
 import {Modal} from 'antd';
 import {FormValueType} from "@/pages/ListTableList/components/UpdateForm";
-import UserFrom from "@/pages/system/user/components/UserForm";
 import {FormType} from "@/enums";
+import RoleFrom from "@/pages/system/role/components/RoleForm";
 
 
-export interface UserFormProps {
+export interface RoleFormProps {
   onCancel: () => void;
   onSubmit: (values: FormValueType) => boolean;
   updateModalVisible: boolean;
@@ -14,7 +14,7 @@ export interface UserFormProps {
 }
 
 
-const CreateModel: React.FC<UserFormProps> = (props) => {
+const CreateModel: React.FC<RoleFormProps> = (props) => {
 
   const {
     onSubmit: submit,
@@ -28,12 +28,12 @@ const CreateModel: React.FC<UserFormProps> = (props) => {
       width={640}
       bodyStyle={{padding: '32px 40px 48px'}}
       destroyOnClose
-      title="新增用户"
+      title="新增角色"
       visible={updateModalVisible}
       okButtonProps={{hidden: true}}
       cancelButtonProps={{hidden: true}}
     >
-      <UserFrom onCancel={onCancel} onSubmit={submit} updateModalVisible={updateModalVisible}
+      <RoleFrom onCancel={onCancel} onSubmit={submit} updateModalVisible={updateModalVisible}
                 type={FormType.CREATE}/>
     </Modal>
   );

@@ -1,5 +1,5 @@
 // https://umijs.org/config/
-import { defineConfig } from 'umi';
+import {defineConfig} from 'umi';
 import defaultSettings from './defaultSettings';
 import proxy from './proxy';
 
@@ -94,7 +94,7 @@ export default defineConfig({
                   path: '/system/role',
                   name: 'role',
                   icon: 'DeploymentUnitOutlined',
-                  component: './Welcome',
+                  component: './system/role',
                   authority: ['super_admin'],
                 },
               ],
