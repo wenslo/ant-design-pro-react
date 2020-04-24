@@ -16,7 +16,7 @@ const UpdateModel: React.FC<RoleFormProps> = (props) => {
   return (
 
     <Modal
-      width={640}
+      width={880}
       bodyStyle={{padding: '32px 40px 48px'}}
       destroyOnClose
       title="角色修改"

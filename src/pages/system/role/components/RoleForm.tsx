@@ -1,6 +1,7 @@
 import {UserFormProps} from "@/pages/system/user/components/UpdateModel";
 import {Button, Form, Input, Radio} from "antd";
 import React from "react";
+import PermissionPicker from "@/pages/system/role/components/PermissionPicker";
 
 const formLayout = {
   labelCol: {span: 7},
@@ -47,6 +48,7 @@ const RoleFrom: React.FC<UserFormProps> = props => {
           <Radio value>启用</Radio>
         </Radio.Group>
       </Form.Item>
+      <PermissionPicker/>
       <div
         style={{
           position: 'absolute',

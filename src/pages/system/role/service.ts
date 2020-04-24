@@ -17,3 +17,7 @@ export async function roleDetail(id: number) {
 export async function roleUpdate(params?: any) {
   return asyncRequest('/role/save', params);
 }
+
+export async function getAllPermission() {
+  return asyncRequest('/role/allPermission');
+}
