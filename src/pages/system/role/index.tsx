@@ -34,7 +34,8 @@ const TableList: React.FC<{}> = () => {
       dataIndex: 'enabled',
       render: (enabled, record) => (
         <>
-          <Switch defaultChecked={enabled as boolean} checkedChildren="启用" unCheckedChildren="禁用"
+          <Switch disabled={record.name === '超级管理员'} defaultChecked={enabled as boolean} checkedChildren="启用"
+                  unCheckedChildren="禁用"
                   onChange={(value) => switchChange(value, record.id)}/>
         </>
       ),
@@ -46,6 +47,7 @@ const TableList: React.FC<{}> = () => {
       render: (_, record) => (
         <>
           <a
+            disabled={record.name === '超级管理员'}
             onClick={async () => {
               const detail = await roleDetail(record.id);
               handleEntity(null);
@@ -56,9 +58,7 @@ const TableList: React.FC<{}> = () => {
             修改
           </a>
           <Divider type="vertical"/>
-          <a href="">删除</a>
-          <Divider type="vertical"/>
-          <a href="">重置密码</a>
+          <a disabled={record.name === '超级管理员'} href="">删除</a>
         </>
       ),
     },

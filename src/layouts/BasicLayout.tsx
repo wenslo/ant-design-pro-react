@@ -4,19 +4,19 @@
  * https://github.com/ant-design/ant-design-pro-layout
  */
 import ProLayout, {
-  MenuDataItem,
   BasicLayoutProps as ProLayoutProps,
-  Settings,
   DefaultFooter,
+  MenuDataItem,
+  Settings,
 } from '@ant-design/pro-layout';
-import React, { useEffect } from 'react';
-import { Link, useIntl, connect, Dispatch } from 'umi';
-import { GithubOutlined } from '@ant-design/icons';
-import { Result, Button } from 'antd';
+import React, {useEffect} from 'react';
+import {connect, Dispatch, Link, useIntl} from 'umi';
+import {GithubOutlined} from '@ant-design/icons';
+import {Button, Result} from 'antd';
 import Authorized from '@/utils/Authorized';
 import RightContent from '@/components/GlobalHeader/RightContent';
-import { ConnectState } from '@/models/connect';
-import { getAuthorityFromRouter } from '@/utils/utils';
+import {ConnectState} from '@/models/connect';
+import {getAuthorityFromRouter} from '@/utils/utils';
 import logo from '../assets/logo.svg';
 
 const noMatch = (
@@ -31,6 +31,7 @@ const noMatch = (
     }
   />
 );
+
 export interface BasicLayoutProps extends ProLayoutProps {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;
@@ -41,6 +42,7 @@ export interface BasicLayoutProps extends ProLayoutProps {
   settings: Settings;
   dispatch: Dispatch;
 }
+
 export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
   breadcrumbNameMap: {
     [path: string]: MenuDataItem;
@@ -52,30 +54,30 @@ export type BasicLayoutContext = { [K in 'location']: BasicLayoutProps[K] } & {
 
 const menuDataRender = (menuList: MenuDataItem[]): MenuDataItem[] =>
   menuList.map((item) => {
-    const localItem = { ...item, children: item.children ? menuDataRender(item.children) : [] };
+    const localItem = {...item, children: item.children ? menuDataRender(item.children) : []};
     return Authorized.check(item.authority, localItem, null) as MenuDataItem;
   });
 
 const defaultFooterDom = (
   <DefaultFooter
-    copyright="2019 蚂蚁金服体验技术部出品"
+    copyright="2020 蚂蚁金服体验技术部出品"
     links={[
       {
-        key: 'Ant Design Pro',
-        title: 'Ant Design Pro',
-        href: 'https://pro.ant.design',
+        key: 'Wenslo',
+        title: 'Wenslo',
+        href: 'https://github.com/wenslo/spring-boot-demo',
         blankTarget: true,
       },
       {
         key: 'github',
-        title: <GithubOutlined />,
-        href: 'https://github.com/ant-design/ant-design-pro',
+        title: <GithubOutlined/>,
+        href: 'https://github.com/wenslo',
         blankTarget: true,
       },
       {
-        key: 'Ant Design',
-        title: 'Ant Design',
-        href: 'https://ant.design',
+        key: 'Fluent',
+        title: 'Fluent',
+        href: 'https://github.com/wenslo/fluent',
         blankTarget: true,
       },
     ]}
@@ -118,7 +120,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   const authorized = getAuthorityFromRouter(props.route.routes, location.pathname || '/') || {
     authority: undefined,
   };
-  const { formatMessage } = useIntl();
+  const {formatMessage} = useIntl();
 
   return (
     <ProLayout
@@ -141,7 +143,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       breadcrumbRender={(routers = []) => [
         {
           path: '/',
-          breadcrumbName: formatMessage({ id: 'menu.home' }),
+          breadcrumbName: formatMessage({id: 'menu.home'}),
         },
         ...routers,
       ]}
@@ -155,7 +157,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
       }}
       footerRender={() => defaultFooterDom}
       menuDataRender={menuDataRender}
-      rightContentRender={() => <RightContent />}
+      rightContentRender={() => <RightContent/>}
       {...props}
       {...settings}
     >
@@ -166,7 +168,7 @@ const BasicLayout: React.FC<BasicLayoutProps> = (props) => {
   );
 };
 
-export default connect(({ global, settings }: ConnectState) => ({
+export default connect(({global, settings}: ConnectState) => ({
   collapsed: global.collapsed,
   settings,
 }))(BasicLayout);

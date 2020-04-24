@@ -43,7 +43,7 @@ export default defineConfig({
         {
           path: '/',
           component: '../layouts/BasicLayout',
-          authority: ['super_admin'],
+          authority: ['ADMINISTRATOR'],
           routes: [
             {
               path: '/',
@@ -60,14 +60,14 @@ export default defineConfig({
               name: 'admin',
               icon: 'crown',
               component: './Admin',
-              authority: ['super_admin'],
+              authority: ['ADMINISTRATOR'],
               routes: [
                 {
                   path: '/admin/sub-page',
                   name: 'sub-page',
                   icon: 'smile',
                   component: './Welcome',
-                  authority: ['super_admin'],
+                  authority: ['ADMINISTRATOR'],
                 },
               ],
             },
@@ -81,21 +81,21 @@ export default defineConfig({
               path: '/system',
               name: 'system',
               icon: 'SettingOutlined',
-              authority: ['super_admin'],
+              authority: ['ADMINISTRATOR'],
               routes: [
                 {
                   path: '/system/user',
                   name: 'user',
                   icon: 'UserOutlined',
                   component: './system/user',
-                  authority: ['super_admin'],
+                  authority: ['ADMINISTRATOR'],
                 },
                 {
                   path: '/system/role',
                   name: 'role',
                   icon: 'DeploymentUnitOutlined',
                   component: './system/role',
-                  authority: ['super_admin'],
+                  authority: ['ADMINISTRATOR'],
                 },
               ],
             },

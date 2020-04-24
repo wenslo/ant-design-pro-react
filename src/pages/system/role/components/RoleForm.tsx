@@ -44,11 +44,12 @@ const RoleFrom: React.FC<UserFormProps> = props => {
       </FormItem>
       <Form.Item name="enabled" label="启用状态">
         <Radio.Group>
-          <Radio value={false}>禁用</Radio>
-          <Radio value>启用</Radio>
+          <Radio key={0} value={false}>禁用</Radio>
+          <Radio key={1} value>启用</Radio>
         </Radio.Group>
       </Form.Item>
-      <PermissionPicker/>
+      <PermissionPicker checkedList={entity.convertedPermission}
+                        pickHandler={() => []}/>
       <div
         style={{
           position: 'absolute',
