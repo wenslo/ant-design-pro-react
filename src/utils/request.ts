@@ -56,17 +56,6 @@ const request = extend({
 
 // 请求拦截
 request.interceptors.request.use((url, options) => {
-  // if(options.params.current){
-  //   const pageable = {
-  //     page: options.data.current,
-  //     size: options.data.pageSize,
-  //   };
-  // eslint-disable-next-line no-param-reassign
-  // options.data.pageable = pageable;
-  // delete options.params.pageSize;
-  // delete options.params.current;
-  // }
-  // console.log(options);
   return {
     url: `${url}`,
     options: {...options, interceptors: true},
@@ -79,7 +68,7 @@ request.interceptors.response.use(async response => {
     const data = await response.clone().json();
     return {
       data: data.content,
-      page: data.number+1,
+      page: data.number + 1,
       success: true,
       total: data.totalElements,
     };
@@ -137,7 +126,7 @@ export async function pageRequest(url: string, data?: any, method?: string) {
 }
 
 export async function asyncRequest(url: string, data?: any, method?: string) {
-  if(data && data.params){
+  if (data && data.params) {
     Object.assign(data, data.params);
     delete data.params;
   }
@@ -145,4 +134,5 @@ export async function asyncRequest(url: string, data?: any, method?: string) {
     method: method || 'POST',
     data,
   });
+
 }

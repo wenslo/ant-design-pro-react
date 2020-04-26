@@ -17,21 +17,40 @@ class PermissionPicker extends PureComponent<PermissionPickerProps> {
     checkedPermission: new Map<string, string[]>(),
   };
 
-  componentDidMount(): void {
-    getAllPermission().then(data => {
-      const {checkedList} = this.props;
-      this.setState({
-        permissionMap: data,
-        checkedPermission: checkedList
-      });
-      const indeterminateMap = new Map<string, boolean>();
-      const checkAllMap = new Map<string, boolean>();
-      Object.keys(checkedList).forEach((key) => {
-        indeterminateMap[key] = checkedList[key].length > 0 && checkedList[key].length < data[key].length;
-        checkAllMap[key] = checkedList[key].length === data[key].length;
-      });
-      this.setState({indeterminateMap, checkAllMap});
+  async componentDidMount(): Promise<void> {
+    const {checkedList} = this.props;
+    const data = await getAllPermission();
+    if (!checkedList) {
+      return;
+    }
+    this.setState({
+      permissionMap: data,
+      checkedPermission: checkedList
     });
+    const indeterminateMap = new Map<string, boolean>();
+    const checkAllMap = new Map<string, boolean>();
+    Object.keys(checkedList).forEach((key) => {
+      indeterminateMap[key] = checkedList[key].length > 0 && checkedList[key].length < data[key].length;
+      checkAllMap[key] = checkedList[key].length === data[key].length;
+    });
+    this.setState({indeterminateMap, checkAllMap});
+
+    // getAllPermission().then(data => {
+    //   const {checkedList} = this.props;
+    //   this.setState({
+    //     permissionMap: data,
+    //     checkedPermission: checkedList
+    //   });
+    //   const indeterminateMap = new Map<string, boolean>();
+    //   const checkAllMap = new Map<string, boolean>();
+    //   Object.keys(checkedList).forEach((key) => {
+    //     indeterminateMap[key] = checkedList[key].length > 0 && checkedList[key].length < data[key].length;
+    //     checkAllMap[key] = checkedList[key].length === data[key].length;
+    //   });
+    //   this.setState({indeterminateMap, checkAllMap});
+    // }).catch((error) => {
+    //   console.log(error)
+    // })
   };
 
   onChange = (checkedList: Array<CheckboxValueType>, group: string) => {
