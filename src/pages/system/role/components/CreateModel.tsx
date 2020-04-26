@@ -1,13 +1,12 @@
 import React from 'react';
 import {Modal} from 'antd';
-import {FormValueType} from "@/pages/ListTableList/components/UpdateForm";
 import {FormType} from "@/enums";
 import RoleFrom from "@/pages/system/role/components/RoleForm";
 
 
 export interface RoleFormProps {
   onCancel: () => void;
-  onSubmit: (values: FormValueType) => boolean;
+  onSubmit: (values: any) => boolean;
   updateModalVisible: boolean;
   entity?: any;
   type: FormType;

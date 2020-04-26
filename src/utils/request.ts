@@ -56,6 +56,9 @@ const request = extend({
 
 // 请求拦截
 request.interceptors.request.use((url, options) => {
+  if (options.data && options.data._timestamp) {
+    delete options.data._timestamp;
+  }
   return {
     url: `${url}`,
     options: {...options, interceptors: true},

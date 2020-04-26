@@ -1,6 +1,6 @@
-import { Effect, Reducer } from 'umi';
+import {Effect, Reducer} from 'umi';
 
-import { queryCurrent, query as queryUsers } from '@/services/user';
+import {query as queryUsers, queryCurrent} from '@/services/user';
 
 export interface CurrentUser {
   avatar?: string;
@@ -16,8 +16,15 @@ export interface CurrentUser {
   unreadCount?: number;
 }
 
+export interface EnumItem {
+  origin: number,
+  value: string,
+  label: string,
+}
+
 export interface UserModelState {
   currentUser?: CurrentUser;
+  enums?: Map<string, EnumItem[]>;
 }
 
 export interface UserModelType {
@@ -38,21 +45,23 @@ const UserModel: UserModelType = {
 
   state: {
     currentUser: {},
+    enums: new Map<string, EnumItem[]>(),
   },
 
   effects: {
-    *fetch(_, { call, put }) {
+    * fetch(_, {call, put}) {
       const response = yield call(queryUsers);
       yield put({
         type: 'save',
         payload: response,
       });
     },
-    *fetchCurrent(_, { call, put }) {
+    * fetchCurrent(_, {call, put}) {
       const data = yield call(queryCurrent);
       yield put({
         type: 'saveCurrentUser',
         payload: data.user,
+        enums: data.enums,
       });
     },
   },
@@ -62,11 +71,13 @@ const UserModel: UserModelType = {
       return {
         ...state,
         currentUser: action.payload || {},
+        enums: action.enums || new Map(),
       };
     },
     changeNotifyCount(
       state = {
         currentUser: {},
+        enums: new Map<string, EnumItem[]>(),
       },
       action,
     ) {

@@ -4,7 +4,6 @@ import {PageHeaderWrapper} from "@ant-design/pro-layout";
 import ProTable from "@ant-design/pro-table";
 import {Divider, Switch} from "antd";
 import {changeStatus, queryRoleByPage, roleDetail, roleUpdate} from "@/pages/system/role/service";
-import {FormValueType} from "@/pages/ListTableList/components/UpdateForm";
 import UpdateModel from "@/pages/system/role/components/UpdateModel";
 
 const switchChange = async (value: boolean, id: number) => {
@@ -75,7 +74,7 @@ const TableList: React.FC<{}> = () => {
       />
       {entity ? (
         <UpdateModel
-          onSubmit={async (value: FormValueType) => {
+          onSubmit={async (value: any) => {
             const success = await handleUpdate(value);
             if (success) {
               handleUpdateModalVisible(false);

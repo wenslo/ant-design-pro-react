@@ -4,21 +4,23 @@ import {PageHeaderWrapper} from "@ant-design/pro-layout";
 import ProTable from "@ant-design/pro-table";
 import {changeStatus, queryUserByPage, userDetail, userUpdate} from "@/pages/system/user/service";
 import {Divider, Switch} from "antd";
-import {FormValueType} from "@/pages/ListTableList/components/UpdateForm";
 import UpdateModel from "@/pages/system/user/components/UpdateModel";
+import EnumRender from "@/components/EnumsRender";
+import {FormType} from "@/enums";
 
-const switchChange = async (value: boolean,id:number) => {
+const switchChange = async (value: boolean, id: number) => {
   await changeStatus({id, enabled: value});
 };
-const handleUpdate = async (fields:any) => {
+const handleUpdate = async (fields: any) => {
   await userUpdate(fields);
   return true;
 };
 
+
 const TableList: React.FC<{}> = () => {
   const actionRef = useRef<ActionType>();
-  const [entity,handleEntity] = useState();
-  const [updateModalVisible,handleUpdateModalVisible] = useState();
+  const [entity, handleEntity] = useState();
+  const [updateModalVisible, handleUpdateModalVisible] = useState();
   const columns: ProColumns<any>[] = [
     {
       title: '登录名',
@@ -31,11 +33,21 @@ const TableList: React.FC<{}> = () => {
     {
       title: '启用状态',
       dataIndex: 'enabled',
-      render: (enabled,record) => (
+      renderFormItem: (item, {defaultRender, ...rest}, form) => {
+        return <EnumRender group="IsFlag" formType={FormType.CREATE} changeCallback={() => console.log(1234)}/>;
+      },
+      render: (enabled, record) => (
         <>
-          <Switch defaultChecked={enabled as boolean} checkedChildren="启用" unCheckedChildren="禁用" onChange={(value) => switchChange(value,record.id)}/>
+          <Switch defaultChecked={enabled as boolean} checkedChildren="启用" unCheckedChildren="禁用"
+                  onChange={(value) => switchChange(value, record.id)}/>
         </>
       ),
+    },
+    {
+      title: '最后修改时间',
+      dataIndex: 'updatedAt',
+      valueType: 'dateTime',
+      hideInSearch: true,
     },
     {
       title: '操作',
@@ -44,7 +56,7 @@ const TableList: React.FC<{}> = () => {
       render: (_, record) => (
         <>
           <a
-            onClick={ async () => {
+            onClick={async () => {
               const detail = await userDetail(record.id);
               handleEntity(null);
               const roles = [];
@@ -58,9 +70,9 @@ const TableList: React.FC<{}> = () => {
           >
             修改
           </a>
-          <Divider type="vertical" />
+          <Divider type="vertical"/>
           <a href="">删除</a>
-          <Divider type="vertical" />
+          <Divider type="vertical"/>
           <a href="">重置密码</a>
         </>
       ),
@@ -78,7 +90,7 @@ const TableList: React.FC<{}> = () => {
       />
       {entity ? (
         <UpdateModel
-          onSubmit={async (value:FormValueType) => {
+          onSubmit={async (value: any) => {
             const success = await handleUpdate(value);
             if (success) {
               handleUpdateModalVisible(false);
