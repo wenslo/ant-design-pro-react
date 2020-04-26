@@ -25,10 +25,12 @@ class PermissionPicker extends PureComponent<PermissionPickerProps> {
         checkedPermission: checkedList
       });
       const indeterminateMap = new Map<string, boolean>();
+      const checkAllMap = new Map<string, boolean>();
       Object.keys(checkedList).forEach((key) => {
-        indeterminateMap[key] = checkedList[key].length > 0;
+        indeterminateMap[key] = checkedList[key].length > 0 && checkedList[key].length < data[key].length;
+        checkAllMap[key] = checkedList[key].length === data[key].length;
       });
-      this.setState({indeterminateMap});
+      this.setState({indeterminateMap, checkAllMap});
     });
   };
 

@@ -19,13 +19,11 @@ const RoleFrom: React.FC<UserFormProps> = props => {
 
   const okHandle = () => {
     form.validateFields().then(fields => {
-      console.log(form.getFieldValue("permission"));
       submit(fields);
     });
   };
   const permissionHandler = (data: string[]) => {
     form.setFieldsValue({"permission": data});
-    console.log(form.getFieldValue("permission"))
   };
 
   return (
