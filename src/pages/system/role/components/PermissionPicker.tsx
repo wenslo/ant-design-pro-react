@@ -98,7 +98,7 @@ class PermissionPicker extends PureComponent<PermissionPickerProps> {
   render() {
     const {permissionMap, checkedPermission, indeterminateMap, checkAllMap} = this.state;
     return (
-      <Form.Item key='permission' label="角色选择">
+      <Form.Item key='permission' name='permission' label="角色选择">
         {Object.keys(permissionMap).map((item) => (
           <Row style={{marginBottom: 10}} key={item}>
             <Checkbox

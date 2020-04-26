@@ -19,8 +19,13 @@ const RoleFrom: React.FC<UserFormProps> = props => {
 
   const okHandle = () => {
     form.validateFields().then(fields => {
+      console.log(form.getFieldValue("permission"));
       submit(fields);
     });
+  };
+  const permissionHandler = (data: string[]) => {
+    form.setFieldsValue({"permission": data});
+    console.log(form.getFieldValue("permission"))
   };
 
   return (
@@ -49,7 +54,7 @@ const RoleFrom: React.FC<UserFormProps> = props => {
         </Radio.Group>
       </Form.Item>
       <PermissionPicker checkedList={entity.convertedPermission}
-                        pickHandler={() => []}/>
+                        pickHandler={permissionHandler}/>
       <div
         style={{
           position: 'absolute',
