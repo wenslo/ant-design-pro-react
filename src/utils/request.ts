@@ -67,7 +67,7 @@ request.interceptors.request.use((url, options) => {
 // 响应拦截
 request.interceptors.response.use(async response => {
   const text = await response.clone().text();
-  if (text.indexOf("pageable") > -1) {
+  if (text.indexOf("content") > -1) {
     const data = await response.clone().json();
     return {
       data: data.content,

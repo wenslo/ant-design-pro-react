@@ -3,6 +3,13 @@ import {asyncRequest, pageRequest} from '@/utils/request';
 export async function queryRoleByPage(params?: any) {
   return pageRequest('/role/queryByPage', {
     params,
+  }).then(it => {
+    console.log(it);
+    if (it) {
+      return Promise.resolve(it);
+    }
+    console.log('error');
+    throw Error;
   });
 }
 

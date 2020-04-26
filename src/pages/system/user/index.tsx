@@ -3,11 +3,10 @@ import {ActionType, ProColumns} from "@ant-design/pro-table/lib/Table";
 import {PageHeaderWrapper} from "@ant-design/pro-layout";
 import ProTable from "@ant-design/pro-table";
 import {changeStatus, queryUserByPage, userDetail, userUpdate} from "@/pages/system/user/service";
-import {Divider, Switch} from "antd";
+import {Divider, Select, Switch} from "antd";
 import UpdateModel from "@/pages/system/user/components/UpdateModel";
-import EnumRender from "@/components/EnumsRender";
-import {FormType} from "@/enums";
 
+const {Option} = Select;
 const switchChange = async (value: boolean, id: number) => {
   await changeStatus({id, enabled: value});
 };
@@ -34,7 +33,13 @@ const TableList: React.FC<{}> = () => {
       title: '启用状态',
       dataIndex: 'enabled',
       renderFormItem: (item, {defaultRender, ...rest}, form) => {
-        return <EnumRender group="IsFlag" formType={FormType.CREATE} changeCallback={() => console.log(1234)}/>;
+        const select = (
+          <Select key='enabled' placeholder='请选择'>
+            <Option key='false' value={false}>禁用</Option>
+            <Option key='true' value={true}>启用</Option>
+          </Select>
+        );
+        return select;
       },
       render: (enabled, record) => (
         <>

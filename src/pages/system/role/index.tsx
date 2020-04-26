@@ -2,10 +2,11 @@ import React, {useRef, useState} from "react";
 import {ActionType, ProColumns} from "@ant-design/pro-table/lib/Table";
 import {PageHeaderWrapper} from "@ant-design/pro-layout";
 import ProTable from "@ant-design/pro-table";
-import {Divider, Switch} from "antd";
+import {Divider, Select, Switch} from "antd";
 import {changeStatus, queryRoleByPage, roleDetail, roleUpdate} from "@/pages/system/role/service";
 import UpdateModel from "@/pages/system/role/components/UpdateModel";
 
+const {Option} = Select;
 const switchChange = async (value: boolean, id: number) => {
   await changeStatus({id, enabled: value});
 };
@@ -31,6 +32,15 @@ const TableList: React.FC<{}> = () => {
     {
       title: '启用状态',
       dataIndex: 'enabled',
+      renderFormItem: (item, {defaultRender, ...rest}, form) => {
+        const select = (
+          <Select key='enabled' placeholder='请选择'>
+            <Option key='false' value={false}>禁用</Option>
+            <Option key='true' value={true}>启用</Option>
+          </Select>
+        );
+        return select;
+      },
       render: (enabled, record) => (
         <>
           <Switch disabled={record.name === '超级管理员'} defaultChecked={enabled as boolean} checkedChildren="启用"

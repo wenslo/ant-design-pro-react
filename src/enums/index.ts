@@ -1,4 +1,9 @@
 export enum FormType {
-  CREATE ,
-  UPDATE ,
+  CREATE,
+  UPDATE,
+}
+
+export enum EnumRenderType {
+  SELECT,
+  RADIO
 }
