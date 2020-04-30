@@ -6,6 +6,7 @@ import {extend} from 'umi-request';
 import {notification} from 'antd';
 import {history} from "@@/core/history";
 import {stringify} from "querystring";
+import {defaultPageable} from "@/enums";
 
 const codeMessage = {
   200: '服务器成功返回请求的数据。',
@@ -116,6 +117,9 @@ function pageConditionHandler(data: any) {
     delete data.params.current;
     delete data.params.pageSize;
     Object.assign(data, data.params);
+    delete data.params;
+  } else {
+    data.pageable = defaultPageable;
     delete data.params;
   }
 }
