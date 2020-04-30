@@ -120,7 +120,6 @@ class UserTableList extends React.PureComponent<UserTableProps> {
           rowKey="id"
           request={(params) => this.queryPage(params)}
           columns={columns}
-          defaultData={[]}
           rowSelection={{}}
         />
         {entity ? (
