@@ -11,3 +11,10 @@ export async function login(params: LoginParamsType) {
     data: params,
   });
 }
+
+export async function logout(params: LoginParamsType) {
+  return request('/api/logout', {
+    method: 'POST',
+    data: params,
+  });
+}

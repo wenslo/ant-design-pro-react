@@ -1,17 +1,19 @@
-import { stringify } from 'querystring';
-import { history, Reducer, Effect } from 'umi';
+import {stringify} from 'querystring';
+import {Effect, history, Reducer} from 'umi';
 
-import { login } from '@/services/login';
-import { setAuthority } from '@/utils/authority';
-import { getPageQuery } from '@/utils/utils';
+import {login, logout} from '@/services/login';
+import {setAuthority} from '@/utils/authority';
+import {getPageQuery} from '@/utils/utils';
+import {notification} from "antd";
 
 export interface StateType {
   status?: 'ok' | 'error';
   type?: string;
   currentAuthority?: 'user' | 'guest' | 'admin';
 }
-interface userAuthority{
-  authority:string;
+
+interface userAuthority {
+  authority: string;
 }
 
 export interface LoginModelType {
@@ -34,9 +36,9 @@ const Model: LoginModelType = {
   },
 
   effects: {
-    *login({ payload }, { call, put }) {
+    * login({payload}, {call, put}) {
       const response = yield call(login, payload);
-      if(response){
+      if (response) {
         yield put({
           type: 'changeLoginStatus',
           payload: response,
@@ -44,7 +46,7 @@ const Model: LoginModelType = {
         // Login successfully
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
-        let { redirect } = params as { redirect: string };
+        let {redirect} = params as { redirect: string };
         if (redirect) {
           const redirectUrlParams = new URL(redirect);
           if (redirectUrlParams.origin === urlParams.origin) {
@@ -61,8 +63,10 @@ const Model: LoginModelType = {
       }
     },
 
-    logout() {
-      const { redirect } = getPageQuery();
+    * logout(_, {call}) {
+      const {redirect} = getPageQuery();
+      yield call(logout);
+      notification.success({message: '提示', description: '登出成功'});
       // Note: There may be security issues, please note
       if (window.location.pathname !== '/user/login' && !redirect) {
         history.replace({
@@ -76,9 +80,9 @@ const Model: LoginModelType = {
   },
 
   reducers: {
-    changeLoginStatus(state, { payload }) {
-      const currentAuthority:string[] = [];
-      payload.user.authorities.forEach((it:userAuthority) =>{
+    changeLoginStatus(state, {payload}) {
+      const currentAuthority: string[] = [];
+      payload.user.authorities.forEach((it: userAuthority) => {
         currentAuthority.push(it.authority);
       });
       setAuthority(currentAuthority);
