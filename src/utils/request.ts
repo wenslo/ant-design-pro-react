@@ -28,12 +28,11 @@ const codeMessage = {
 /**
  * 异常处理程序
  */
-const errorHandler = (error: { response: Response }): Response => {
+const errorHandler = (error: { response: Response }): null => {
   const {response} = error;
   if (response && response.status) {
     const errorText = codeMessage[response.status] || response.statusText;
     const {status, url} = response;
-
     notification.error({
       message: `请求错误 ${status}: ${url}`,
       description: errorText,
@@ -44,7 +43,7 @@ const errorHandler = (error: { response: Response }): Response => {
       message: '网络异常',
     });
   }
-  return response;
+  return null;
 };
 
 /**
@@ -93,6 +92,12 @@ request.interceptors.response.use(async response => {
           }),
         });
       }
+    } else if (code === 403) {
+      notification.error({
+        description: data.msg,
+        message: '访问被拒绝',
+      });
+      return null;
     } else {
       notification.error({
         description: data.msg,

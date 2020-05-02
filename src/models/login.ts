@@ -43,6 +43,9 @@ const Model: LoginModelType = {
           type: 'changeLoginStatus',
           payload: response,
         });
+        notification.success({
+          message: '欢迎登录！',
+        });
         // Login successfully
         const urlParams = new URL(window.location.href);
         const params = getPageQuery();
@@ -66,7 +69,7 @@ const Model: LoginModelType = {
     * logout(_, {call}) {
       const {redirect} = getPageQuery();
       yield call(logout);
-      notification.success({message: '提示', description: '登出成功'});
+      notification.success({message: '登出成功！'});
       // Note: There may be security issues, please note
       if (window.location.pathname !== '/user/login' && !redirect) {
         history.replace({
