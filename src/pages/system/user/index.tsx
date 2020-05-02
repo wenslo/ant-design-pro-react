@@ -2,27 +2,40 @@ import React, {useState} from "react";
 import {ActionType, ProColumns} from "@ant-design/pro-table/lib/Table";
 import {PageHeaderWrapper} from "@ant-design/pro-layout";
 import ProTable from "@ant-design/pro-table";
-import {changeStatus, queryUserByPage, userDetail, userUpdate} from "@/pages/system/user/service";
+import {
+  changeStatus,
+  queryUserByPage,
+  userDetail,
+  userPwdReset,
+  userRemove,
+  userUpdate
+} from "@/pages/system/user/service";
 import {Divider, Select, Switch} from "antd";
 import UpdateModel from "@/pages/system/user/components/UpdateModel";
+import PwdResetModel from "@/pages/system/user/components/PwdResetModel";
 
 const {Option} = Select;
 const actionRef = React.createRef<ActionType>();
 
 const switchChange = async (value: boolean, id: number) => {
   await changeStatus({id, enabled: value});
+  // @ts-ignore
   actionRef.current.reload();
 };
 const handleUpdate = async (fields: any) => {
   await userUpdate(fields);
   return true;
 };
-
+const handlePwdReset = async (fields: any) => {
+  await userPwdReset(fields);
+  return true;
+};
 
 const TableList: React.FC<{}> = () => {
 
   const [entity, handleEntity] = useState();
   const [updateModalVisible, handleUpdateModalVisible] = useState();
+  const [pwdModelVisible, handlePwdModelVisible] = useState();
   const columns: ProColumns<any>[] = [
     {
       title: '登录名',
@@ -79,9 +92,18 @@ const TableList: React.FC<{}> = () => {
             修改
           </a>
           <Divider type="vertical"/>
-          <a href="">删除</a>
+          <a onClick={async () => {
+            await userRemove(record.id);
+            // @ts-ignore
+            actionRef.current.reload();
+          }}>
+            删除
+          </a>
           <Divider type="vertical"/>
-          <a href="">重置密码</a>
+          <a onClick={async () => {
+            handleEntity({id: record.id});
+            handlePwdModelVisible(true);
+          }}>重置密码</a>
         </>
       ),
     },
@@ -97,23 +119,42 @@ const TableList: React.FC<{}> = () => {
         rowSelection={{}}
       />
       {entity ? (
-        <UpdateModel
-          onSubmit={async (value: any) => {
-            const success = await handleUpdate(value);
-            if (success) {
-              handleUpdateModalVisible(false);
-              handleEntity(null);
-              if (actionRef.current) {
-                actionRef.current.reload();
+        <>
+          <UpdateModel
+            onSubmit={async (value: any) => {
+              const success = await handleUpdate(value);
+              if (success) {
+                handleUpdateModalVisible(false);
+                handleEntity(null);
+                if (actionRef.current) {
+                  actionRef.current.reload();
+                }
               }
-            }
-          }}
-          onCancel={() => {
-            handleUpdateModalVisible(false);
-          }}
-          entity={entity}
-          updateModalVisible={updateModalVisible}
-        />
+            }}
+            onCancel={() => {
+              handleUpdateModalVisible(false);
+            }}
+            entity={entity}
+            updateModalVisible={updateModalVisible}
+          />
+          <PwdResetModel
+            onSubmit={async (value: any) => {
+              const success = await handlePwdReset(value);
+              if (success) {
+                handlePwdModelVisible(false);
+                handleEntity(null);
+                if (actionRef.current) {
+                  actionRef.current.reload();
+                }
+              }
+            }}
+            onCancel={() => {
+              handlePwdModelVisible(false);
+            }}
+            id={entity.id}
+            visible={pwdModelVisible}
+          />
+        </>
       ) : null}
     </PageHeaderWrapper>
 
