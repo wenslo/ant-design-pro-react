@@ -10,10 +10,12 @@ import {
   userRemove,
   userUpdate
 } from "@/pages/system/user/service";
-import {Divider, Select, Switch} from "antd";
+import {Button, Divider, Select, Switch} from "antd";
 import UpdateModel from "@/pages/system/user/components/UpdateModel";
 import PwdResetModel from "@/pages/system/user/components/PwdResetModel";
 import Authorized from "@/utils/Authorized";
+import {PlusOutlined} from "@ant-design/icons/lib";
+import CreateModel from "@/pages/system/user/components/CreateModel";
 
 const {Option} = Select;
 const actionRef = React.createRef<ActionType>();
@@ -37,6 +39,8 @@ const TableList: React.FC<{}> = () => {
   const [entity, handleEntity] = useState();
   const [updateModalVisible, handleUpdateModalVisible] = useState();
   const [pwdModelVisible, handlePwdModelVisible] = useState();
+  const [createModelVisible, handleCreateModalVisible] = useState();
+
   const columns: ProColumns<any>[] = [
     {
       title: '登录名',
@@ -121,6 +125,11 @@ const TableList: React.FC<{}> = () => {
         request={(params) => queryUserByPage(params)}
         columns={columns}
         rowSelection={{}}
+        toolBarRender={() => [
+          <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
+            <PlusOutlined/> 新建
+          </Button>,
+        ]}
       />
       {entity ? (
         <>
@@ -158,10 +167,25 @@ const TableList: React.FC<{}> = () => {
             id={entity.id}
             visible={pwdModelVisible}
           />
-
-
         </>
       ) : null}
+      <CreateModel
+        onSubmit={async (value: any) => {
+          const success = await handleUpdate(value);
+          if (success) {
+            handleCreateModalVisible(false);
+            handleEntity(null);
+            if (actionRef.current) {
+              actionRef.current.reload();
+            }
+          }
+        }}
+        onCancel={() => {
+          handleCreateModalVisible(false);
+        }}
+        entity={entity}
+        modalVisible={createModelVisible}
+      />
     </PageHeaderWrapper>
 
   )

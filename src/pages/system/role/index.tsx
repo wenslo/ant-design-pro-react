@@ -2,9 +2,11 @@ import React, {useRef, useState} from "react";
 import {ActionType, ProColumns} from "@ant-design/pro-table/lib/Table";
 import {PageHeaderWrapper} from "@ant-design/pro-layout";
 import ProTable from "@ant-design/pro-table";
-import {Divider, Select, Switch} from "antd";
-import {changeStatus, queryRoleByPage, roleDetail, roleUpdate} from "@/pages/system/role/service";
+import {Button, Divider, Select, Switch} from "antd";
+import {changeStatus, queryRoleByPage, roleDetail, roleRemove, roleUpdate} from "@/pages/system/role/service";
 import UpdateModel from "@/pages/system/role/components/UpdateModel";
+import {PlusOutlined} from "@ant-design/icons/lib";
+import CreateModel from "@/pages/system/role/components/CreateModel";
 
 const {Option} = Select;
 const switchChange = async (value: boolean, id: number) => {
@@ -20,6 +22,7 @@ const TableList: React.FC<{}> = () => {
   const actionRef = useRef<ActionType>();
   const [entity, handleEntity] = useState();
   const [updateModalVisible, handleUpdateModalVisible] = useState();
+  const [createModalVisible, handleCreateModalVisible] = useState();
   const columns: ProColumns<any>[] = [
     {
       title: '角色名称',
@@ -67,7 +70,11 @@ const TableList: React.FC<{}> = () => {
             修改
           </a>
           <Divider type="vertical"/>
-          <a disabled={record.name === '超级管理员'} href="">删除</a>
+          <a disabled={record.name === '超级管理员'} onClick={async () => {
+            await roleRemove(record.id);
+            // @ts-ignore
+            actionRef.current.reload();
+          }}>删除</a>
         </>
       ),
     },
@@ -81,6 +88,11 @@ const TableList: React.FC<{}> = () => {
         request={(params) => queryRoleByPage(params)}
         columns={columns}
         rowSelection={{}}
+        toolBarRender={() => [
+          <Button type="primary" onClick={() => handleCreateModalVisible(true)}>
+            <PlusOutlined/> 新建
+          </Button>,
+        ]}
       />
       {entity ? (
         <UpdateModel
@@ -101,6 +113,22 @@ const TableList: React.FC<{}> = () => {
           updateModalVisible={updateModalVisible}
         />
       ) : null}
+      <CreateModel
+        onSubmit={async (value: any) => {
+          const success = await handleUpdate(value);
+          if (success) {
+            handleCreateModalVisible(false);
+            handleEntity(null);
+            if (actionRef.current) {
+              actionRef.current.reload();
+            }
+          }
+        }}
+        onCancel={() => {
+          handleCreateModalVisible(false);
+        }}
+        modalVisible={createModalVisible}
+      />
     </PageHeaderWrapper>
 
 

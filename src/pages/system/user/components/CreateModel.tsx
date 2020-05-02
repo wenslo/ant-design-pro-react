@@ -7,7 +7,7 @@ import {FormType} from "@/enums";
 export interface UserFormProps {
   onCancel: () => void;
   onSubmit: (values: any) => boolean;
-  updateModalVisible: boolean;
+  modalVisible: boolean;
   entity?: any;
   type: FormType;
 }
@@ -18,7 +18,7 @@ const CreateModel: React.FC<UserFormProps> = (props) => {
   const {
     onSubmit: submit,
     onCancel,
-    updateModalVisible,
+    modalVisible,
   } = props;
 
   return (
@@ -28,11 +28,11 @@ const CreateModel: React.FC<UserFormProps> = (props) => {
       bodyStyle={{padding: '32px 40px 48px'}}
       destroyOnClose
       title="新增用户"
-      visible={updateModalVisible}
+      visible={modalVisible}
       okButtonProps={{hidden: true}}
       cancelButtonProps={{hidden: true}}
     >
-      <UserFrom onCancel={onCancel} onSubmit={submit} updateModalVisible={updateModalVisible}
+      <UserFrom onCancel={onCancel} onSubmit={submit} updateModalVisible={modalVisible}
                 type={FormType.CREATE}/>
     </Modal>
   );
