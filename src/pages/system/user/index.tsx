@@ -13,6 +13,7 @@ import {
 import {Divider, Select, Switch} from "antd";
 import UpdateModel from "@/pages/system/user/components/UpdateModel";
 import PwdResetModel from "@/pages/system/user/components/PwdResetModel";
+import Authorized from "@/utils/Authorized";
 
 const {Option} = Select;
 const actionRef = React.createRef<ActionType>();
@@ -99,11 +100,14 @@ const TableList: React.FC<{}> = () => {
           }}>
             删除
           </a>
-          <Divider type="vertical"/>
-          <a onClick={async () => {
-            handleEntity({id: record.id});
-            handlePwdModelVisible(true);
-          }}>重置密码</a>
+          <Authorized authority={['ADMINISTRATOR']} noMatch={null}>
+
+            <Divider type="vertical"/>
+            <a onClick={async () => {
+              handleEntity({id: record.id});
+              handlePwdModelVisible(true);
+            }}>重置密码</a>
+          </Authorized>
         </>
       ),
     },
@@ -154,6 +158,8 @@ const TableList: React.FC<{}> = () => {
             id={entity.id}
             visible={pwdModelVisible}
           />
+
+
         </>
       ) : null}
     </PageHeaderWrapper>
