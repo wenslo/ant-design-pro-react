@@ -52,4 +52,5 @@ export default {
   'menu.system': 'System',
   'menu.system.user': 'User',
   'menu.system.role': 'Role',
+  'menu.system.district': 'District',
 };

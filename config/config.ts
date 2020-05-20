@@ -75,6 +75,12 @@ export default defineConfig({
                   component: './system/role',
                   authority: ['ROLE_VIEW'],
                 },
+                {
+                  path: '/system/district',
+                  name: 'district',
+                  icon: 'DeploymentUnitOutlined',
+                  component: './system/district',
+                },
               ],
             },
             {
